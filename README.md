@@ -43,4 +43,29 @@ python examples/sliding_window/log_analyzer.py \
     --error-code 500 \
     --window 300 \
     --threshold 3
+```
+
+### **场景2：数据库断言（SQL自动化验证**
+```python
+from utils.db_assert import DBAssert
+
+# 验证部门最高工资
+db = DBAssert('test.db')
+expected = [('IT', 'Alice', 90000), ('HR', 'Charlie', 80000)]
+db.assert_query("""
+    SELECT d.name, e.name, e.salary 
+    FROM Employee e 
+    JOIN Department d ON e.departmentId = d.id
+    WHERE (e.departmentId, e.salary) IN (
+        SELECT departmentId, MAX(salary) 
+        FROM Employee 
+        GROUP BY departmentId
+    )
+""", expected)
+print("断言通过！")
+```
+## 🗂️ 项目结构
+```bash
+
+```
 
